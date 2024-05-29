@@ -6,6 +6,10 @@ const Board = () => {
   const [text, setText] = useState(null);
   const [viewData, setViewData] = useState([]);
 
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   const fetchData = async () => {
     try {
       const response = await getBoard();
@@ -16,27 +20,20 @@ const Board = () => {
     }
   };
 
-  const submitData = () => {
-    try {
-      const data = { name, text };
-      addBoard(data);
-      fetchData();
-      setName(null);
-      setText(null);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleKeyPress = (event) => {
-    if (event.key === "Enter") {
-      submitData();
-    }
-  };
-
-  useEffect(() => {
+  const submitData = async (e) => {
+    e.preventDefault();
+    const data = { name, text };
+    addBoard(data);
     fetchData();
-  }, []);
+    setName(null);
+    setText(null);
+  };
+
+  // const handleKeyPress = (event) => {
+  //   if (event.key === "Enter") {
+  //     submitData();
+  //   }
+  // };
 
   return (
     <>
@@ -56,7 +53,6 @@ const Board = () => {
           placeholder="text"
           onChange={(e) => setText(e.target.value)}
           value={text === null ? "" : text}
-          onKeyDown={handleKeyPress}
         />
       </div>
       <div>
